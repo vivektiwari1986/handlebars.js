@@ -38,6 +38,14 @@ describe('partials', function() {
     var hash = {dudes: [{name: "Yehuda", url: "http://yehuda"}, {name: "Alan", url: "http://alan"}]};
     shouldCompileToWithPartials(string, [hash, {}, {dude: dude, url: url}], true, "Dudes: Yehuda <a href='http://yehuda'>http://yehuda</a> Alan <a href='http://alan'>http://alan</a> ", "Partials are rendered inside of other partials");
   });
+  
+  it("rendering dynamic partial with name present in json data", function() {
+    var string = "Dudes: {{#dudes}}{{> dynamicPartialName}}{{/dudes}}";
+    var partial = "{{name}} ({{url}}) ";
+    var hash = {dynamicPartialName: "dude", dudes: [{name: "Yehuda", url: "http://yehuda"}, {name: "Alan", url: "http://alan"}]};
+    shouldCompileToWithPartials(string, [hash, {}, {dude: partial}], true, "Dudes: Yehuda (http://yehuda) Alan (http://alan) ",
+                    "Basic partials output based on current context.");
+  });
 
   it("rendering undefined partial throws an exception", function() {
     shouldThrow(function() {
